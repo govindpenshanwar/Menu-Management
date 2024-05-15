@@ -156,3 +156,26 @@ export const updateSubCategory = async (req, res) => {
         });
     }
 };
+
+export const deleteSubCategory = async (req, res) => {
+    try {
+        const { id } = req.params;
+        if (!id) {
+            return res.json({
+                success: false,
+                message: "No SubCategory with given id found"
+            })
+        }
+        const deletedCategory = await subCategory.findByIdAndDelete(id);
+        return res.json({
+            success: true,
+            message: "SubCategory Deleted Successfully"
+        })
+
+    } catch (error) {
+        return res.json({
+            success: false,
+            error: error.message
+        })
+    }
+}

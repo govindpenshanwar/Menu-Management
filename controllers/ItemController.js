@@ -171,3 +171,26 @@ export const searchItem = async (req, res) => {
         })
     }
 }
+
+export const deleteItem = async (req, res) => {
+    try {
+        const { id } = req.params;
+        if (!id) {
+            return res.json({
+                success: false,
+                message: "No Item with given id found"
+            })
+        }
+        const deletedItem = await Item.findByIdAndDelete(id);
+        return res.json({
+            success: true,
+            message: "Item Deleted Successfully"
+        });
+
+    } catch (error) {
+        return res.json({
+            success: false,
+            error: error.message
+        })
+    }
+}
