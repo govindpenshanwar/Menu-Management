@@ -34,6 +34,10 @@ To start the server, run:
 npm start
 ```
 
+## Checkout
+
+- Link - https://menu-management-api.vercel.app/
+
 ## API Endpoints
 
 ### Categories
