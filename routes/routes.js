@@ -21,6 +21,7 @@ import {
     getItemById,
     getItemBySubCategory,
     getItems,
+    searchItem,
     updateItem,
 } from "../controllers/ItemController.js";
 import upload from "../multer/multer.js";
@@ -44,11 +45,12 @@ router.get("/subcategories/category/:id", getSubCategoriesByCategory);
 router.put("/categories/:id", updateSubCategory);
 
 //Items Routes
+router.get("/items/search", searchItem);
 router.post("/items", upload.single('image'), createItem);
 router.get("/items", getItems);
 router.get("/items/category/:id", getItemByCategory);
 router.get("/items/subcategory/:id", getItemBySubCategory);
-router.get('/items/:id', getItemById)
+router.get('/items/:id', getItemById);
 router.put("/items/:id", updateItem);
 
 connect();

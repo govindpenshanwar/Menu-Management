@@ -10,6 +10,7 @@ cloudinary.config({
     api_key: process.env.CLOUDINARY_API_KEY,
     api_secret: process.env.CLOUDINARY_API_SECRET,
 });
+
 export const createItem = async (req, res) => {
     try {
         const image = req.file;
@@ -151,3 +152,22 @@ export const updateItem = async (req, res) => {
         })
     }
 };
+
+export const searchItem = async (req, res) => {
+    try {
+        const items = await Item.find({
+            name: new RegExp(req.query.name, 'i')
+        }).populate('category').populate('subCategory');
+
+        return res.json({
+            success: true,
+            items
+        })
+
+    } catch (error) {
+        return res.json({
+            success: false,
+            error: error.message
+        })
+    }
+}
