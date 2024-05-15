@@ -19,9 +19,13 @@ const subCategorySchema = new mongoose.Schema({
     tax: {
         type: Number
     },
+    // category: {
+    //     type: mongoose.Schema.Types.ObjectId,
+    //     ref: "Category",
+    //     required: true,
+    // },
     category: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "Category",
+        type: String,
         required: true,
     },
 });

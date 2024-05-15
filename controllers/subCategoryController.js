@@ -1,6 +1,7 @@
 import subCategory from "../models/SubCategory.js";
 import { v2 as cloudinary } from "cloudinary";
 import dotenv from "dotenv";
+import Category from "../models/Category.js";
 
 dotenv.config();
 
@@ -12,12 +13,20 @@ cloudinary.config({
 
 export const createSubCategory = async (req, res) => {
     try {
+        const { category } = req.body;
         const image = req.file;
 
         if (!image) {
             return res.status(400).json({ error: "No picture uploaded" });
         }
 
+        const categoryName = await Category.findOne({
+            name: category
+        })
+        if (!categoryName) {
+            return res.status(400).
+                json({ error: "Category Does not exists..." });
+        }
         const result = await cloudinary.uploader
             .upload_stream(
                 {
@@ -71,9 +80,17 @@ export const getSubCategories = async (req, res) => {
 
 export const getSubCategoriesByCategory = async (req, res) => {
     try {
+        const { categoryName } = req.params;
+
         const subCategories = await subCategory.find({
-            category: req.params.id,
+            category: categoryName,
         });
+        if (subCategories.length === 0) {
+            return res.json({
+                success: false,
+                message: "Category does not exists.."
+            })
+        }
         return res.json({
             success: true,
             subCategories,

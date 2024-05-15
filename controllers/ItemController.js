@@ -1,7 +1,8 @@
 import Item from "../models/Items.js"
-
+import SubCategory from "../models/SubCategory.js";
 import { v2 as cloudinary } from 'cloudinary';
 import dotenv from 'dotenv';
+import Category from "../models/Category.js";
 
 dotenv.config();
 
@@ -14,11 +15,25 @@ cloudinary.config({
 export const createItem = async (req, res) => {
     try {
         const image = req.file;
-
+        const { category, subCategory } = req.body;
         if (!image) {
             return res.status(400).json({ error: "No picture uploaded" });
         }
+        const categoryName = await Category.findOne({
+            name: category
+        });
+        if (!categoryName) {
+            return res.status(400).
+                json({ error: "Category Does not exists..." });
+        }
+        const subCategoryName = await SubCategory.findOne({
+            name: subCategory
+        });
 
+        if (!subCategoryName) {
+            return res.status(400).
+                json({ error: "SubCategory Does not exists..." });
+        }
         const result = await cloudinary.uploader
             .upload_stream(
                 {
@@ -56,9 +71,61 @@ export const createItem = async (req, res) => {
     }
 }
 
+// export const getItems = async (req, res) => {
+//     try {
+//         const allItems = await Item.find().populate('category').populate('subCategory');
+//         return res.json({
+//             success: true,
+//             allItems
+//         })
+//     } catch (error) {
+//         return res.json({
+//             success: false,
+//             error: error.message
+//         })
+//     }
+// }
+
+// export const getItemByCategory = async (req, res) => {
+//     try {
+//         const itemByCategory = await Item.find({
+//             category: req.params.id
+//         }).populate('category').populate('subCategory');
+
+//         return res.json({
+//             success: true,
+//             itemByCategory
+//         })
+
+//     } catch (error) {
+//         return res.json({
+//             success: false,
+//             error: error.message
+//         })
+//     }
+// }
+// export const getItemBySubCategory = async (req, res) => {
+//     try {
+//         const itemBySubCategory = await Item.find({
+//             subCategory: req.params.id
+//         }).populate('category').populate('subCategory');
+
+//         return res.json({
+//             success: true,
+//             itemBySubCategory
+//         })
+
+//     } catch (error) {
+//         return res.json({
+//             success: false,
+//             error: error.message
+//         })
+//     }
+// }
+
 export const getItems = async (req, res) => {
     try {
-        const allItems = await Item.find().populate('category').populate('subCategory');
+        const allItems = await Item.find();
         return res.json({
             success: true,
             allItems
@@ -70,43 +137,42 @@ export const getItems = async (req, res) => {
         })
     }
 }
-
 export const getItemByCategory = async (req, res) => {
     try {
         const itemByCategory = await Item.find({
-            category: req.params.id
-        }).populate('category').populate('subCategory');
+            category: req.params.categoryName
+        });
 
         return res.json({
             success: true,
             itemByCategory
-        })
-
+        });
     } catch (error) {
         return res.json({
             success: false,
             error: error.message
-        })
+        });
     }
-}
+};
+
 export const getItemBySubCategory = async (req, res) => {
     try {
         const itemBySubCategory = await Item.find({
-            subCategory: req.params.id
-        }).populate('category').populate('subCategory');
+            subCategory: req.params.subCategoryName
+        });
 
         return res.json({
             success: true,
             itemBySubCategory
-        })
-
+        });
     } catch (error) {
         return res.json({
             success: false,
             error: error.message
-        })
+        });
     }
-}
+};
+
 
 export const getItemById = async (req, res) => {
     try {
@@ -157,7 +223,7 @@ export const searchItem = async (req, res) => {
     try {
         const items = await Item.find({
             name: new RegExp(req.query.name, 'i')
-        }).populate('category').populate('subCategory');
+        });
 
         return res.json({
             success: true,

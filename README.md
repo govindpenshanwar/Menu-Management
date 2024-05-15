@@ -83,11 +83,11 @@ npm start
   - `taxNumber`: Number (optional)
   - `taxType`: String (optional)
   - `image`: File (optional)
-  - `category` : Id (required)
+  - `category` : String (required)
 
 - **Get All Subcategories** - GET /api/subcategories
 
-- **Get Subcategories by Category** - GET /api/subcategories/category/:id
+- **Get Subcategories by Category** - GET /api/subcategories/category/:categoryName
 
 - **Get Subcategory by Name** - GET /api/subcategories/:name
 
@@ -115,8 +115,8 @@ npm start
   - `baseAmount`: Number (required)
   - `discount`: Number (required)
   - `image`: File (optional)
-  - `category` : Id (required)
-  - `subCategory` : Id (required)
+  - `category` : String (required)
+  - `subCategory` : String (required)
 
 - **Get All Items** - GET /api/items
 
